@@ -33,9 +33,18 @@
   box-sizing: border-box;
 }
 
+*,
+*::before,
+*::after {
+  min-width: 0;
+}
+
 html {
   min-height: 100%;
   background: var(--background);
+  scrollbar-color: rgba(197, 139, 41, 0.46) rgba(6, 6, 6, 0.42);
+  scrollbar-width: thin;
+  scroll-behavior: smooth;
 }
 
 body {
@@ -68,6 +77,34 @@ textarea {
 
 button {
   cursor: pointer;
+  transition:
+    border-color 160ms ease,
+    background-color 160ms ease,
+    color 160ms ease,
+    opacity 160ms ease,
+    transform 120ms ease;
+}
+
+button:active {
+  transform: translateY(1px);
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(6, 6, 6, 0.42);
+}
+
+::-webkit-scrollbar-thumb {
+  border: 2px solid rgba(6, 6, 6, 0.72);
+  background: rgba(197, 139, 41, 0.52);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(83, 214, 232, 0.5);
 }
 
 ::selection {
@@ -172,13 +209,13 @@ button {
 
 .command-bar {
   display: grid;
-  grid-template-columns: minmax(280px, 1fr) minmax(210px, 0.7fr) minmax(300px, 0.82fr) minmax(116px, auto);
+  grid-template-columns: minmax(210px, 1fr) minmax(170px, 0.7fr) minmax(238px, 0.82fr) minmax(104px, auto);
   align-items: center;
-  gap: 16px;
+  gap: 10px;
   min-width: 0;
   border-bottom: 1px solid var(--line-muted);
   background: var(--surface);
-  padding: 0 16px;
+  padding: 0 12px;
 }
 
 .brand-block {
@@ -457,9 +494,9 @@ button {
   padding: 0 7px;
   text-align: left;
   transition:
-    border-color 800ms ease,
-    color 800ms ease,
-    background-color 800ms ease;
+    border-color 160ms ease,
+    color 160ms ease,
+    background-color 160ms ease;
 }
 
 .rail-link::before {
@@ -555,7 +592,7 @@ button {
   position: relative;
   z-index: 1;
   display: grid;
-  grid-template-rows: minmax(0, 1fr) 132px;
+  grid-template-rows: minmax(0, 1fr) clamp(112px, 17vh, 132px);
   gap: 8px;
   min-height: 0;
   align-items: stretch;
@@ -1369,7 +1406,9 @@ button {
   color: var(--text);
   font-size: 0.53rem;
   line-height: 1.4;
-  white-space: pre;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .module-frame-footer {
@@ -1422,13 +1461,19 @@ button {
 
 .console-lines p {
   display: grid;
-  grid-template-columns: 82px 52px 1fr;
-  gap: 10px;
+  grid-template-columns: 76px 46px minmax(0, 1fr);
+  gap: 8px;
   margin: 0;
   color: var(--text);
   font-family: var(--font-body);
   font-size: 0.68rem;
   line-height: 1.25;
+}
+
+.console-lines p > * {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .console-lines time {
@@ -1466,7 +1511,7 @@ button {
 .bottom-status-bar {
   display: grid;
   grid-column: 1 / -1;
-  grid-template-columns: 150px repeat(8, minmax(0, 1fr));
+  grid-template-columns: minmax(126px, 150px) repeat(8, minmax(72px, 1fr));
   border-top: 1px solid rgba(197, 139, 41, 0.36);
   background: rgba(7, 8, 8, 0.95);
 }
@@ -1486,7 +1531,8 @@ button {
 }
 
 .status-cell {
-  display: flex;
+  display: grid;
+  grid-template-columns: minmax(0, 0.78fr) minmax(0, 1fr);
   align-items: center;
   justify-content: space-between;
   gap: 8px;
@@ -1500,6 +1546,12 @@ button {
   background: transparent;
   padding: 0 9px;
   text-align: left;
+}
+
+.status-cell span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .status-cell:last-child {
@@ -1611,8 +1663,8 @@ button {
 
 .sentry-dock {
   position: absolute;
-  right: 18px;
-  bottom: 44px;
+  right: 16px;
+  bottom: 42px;
   z-index: 3;
   display: flex;
   gap: 6px;
@@ -1634,8 +1686,16 @@ button {
 
 .sentry-dock button {
   position: relative;
-  min-width: 54px;
+  min-width: 52px;
+  max-width: 70px;
   height: 24px;
+}
+
+.sentry-dock span {
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .sentry-dock button:hover,
@@ -1663,8 +1723,8 @@ button {
   top: 72px;
   z-index: 8;
   display: grid;
-  gap: 6px;
-  width: min(300px, calc(100vw - 36px));
+  gap: 8px;
+  width: min(320px, calc(100vw - 36px));
   pointer-events: none;
 }
 
@@ -1674,6 +1734,7 @@ button {
   gap: 8px;
   align-items: center;
   min-height: 46px;
+  max-height: 68px;
   border: 1px solid rgba(197, 139, 41, 0.38);
   background:
     linear-gradient(90deg, rgba(83, 214, 232, 0.04) 1px, transparent 1px),
@@ -1682,6 +1743,13 @@ button {
   box-shadow: inset 0 0 18px rgba(197, 139, 41, 0.05);
   padding: 6px;
   pointer-events: auto;
+  animation:
+    notificationIn 160ms ease-out both,
+    notificationOut 260ms ease-in 4.28s forwards;
+}
+
+.sentry-notification > div {
+  min-width: 0;
 }
 
 .sentry-notification.success {
@@ -1744,15 +1812,16 @@ button {
   position: relative;
   display: grid;
   grid-template-rows: 28px minmax(0, 1fr);
-  gap: 8px;
+  gap: 10px;
   min-height: 0;
+  overflow: hidden;
   border: 1px solid var(--line-muted);
   background:
     linear-gradient(90deg, rgba(83, 214, 232, 0.05) 1px, transparent 1px),
     linear-gradient(180deg, rgba(197, 139, 41, 0.04) 1px, transparent 1px),
     #050506;
   background-size: 18px 18px, 18px 18px, auto;
-  padding: 8px;
+  padding: 10px;
 }
 
 .workspace-live-header,
@@ -1775,6 +1844,19 @@ button {
   min-height: 24px;
 }
 
+.workspace-live-header span,
+.workspace-live-header strong,
+.viz-chart-frame header span,
+.viz-timeline-frame header span,
+.viz-inspector-frame header span,
+.viz-table-frame header span,
+.viz-gauge-frame header span,
+.viz-panel header span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
 .workspace-live-header strong,
 .viz-chart-frame strong,
 .viz-timeline-frame strong,
@@ -1792,6 +1874,7 @@ button {
   display: grid;
   gap: 8px;
   min-height: 0;
+  overflow: hidden;
 }
 
 .workspace-grid.equal {
@@ -1810,6 +1893,7 @@ button {
   display: grid;
   grid-template-columns: repeat(6, minmax(0, 1fr));
   gap: 6px;
+  min-height: 0;
 }
 
 .viz-stats-strip section,
@@ -1867,6 +1951,7 @@ button {
   border: 1px solid var(--line-muted);
   background: rgba(5, 5, 6, 0.78);
   padding: 8px;
+  overflow: hidden;
 }
 
 .viz-chart-grid,
@@ -1900,6 +1985,7 @@ button {
 .viz-timeline-list {
   max-height: 220px;
   overflow: auto;
+  padding-right: 2px;
 }
 
 .viz-timeline-list button {
@@ -1907,14 +1993,29 @@ button {
   grid-template-columns: 74px minmax(0, 1fr) auto;
   gap: 8px;
   align-items: center;
-  min-height: 26px;
+  min-height: 30px;
   border: 1px solid rgba(197, 139, 41, 0.18);
   background: transparent;
   color: var(--text-muted);
   font-family: var(--font-micro);
   font-size: 0.55rem;
   font-weight: 800;
+  padding: 0 6px;
   text-align: left;
+}
+
+.viz-timeline-list button:hover,
+.viz-timeline-list button:focus-visible,
+.palette-results button:hover,
+.palette-results button:focus-visible,
+.viz-table-frame tr:hover td,
+.provider-matrix section:hover,
+.severity-card:hover,
+.viz-stats-strip section:hover {
+  border-color: rgba(83, 214, 232, 0.38);
+  background-color: rgba(83, 214, 232, 0.045);
+  color: var(--text);
+  outline: none;
 }
 
 .viz-timeline-list span,
@@ -1936,7 +2037,7 @@ button {
 
 .viz-inspector-frame div {
   display: grid;
-  grid-template-columns: 78px minmax(0, 1fr);
+  grid-template-columns: minmax(66px, 82px) minmax(0, 1fr);
   gap: 8px;
 }
 
@@ -1969,6 +2070,7 @@ button {
   color: var(--text-muted);
   font-family: var(--font-mono);
   font-size: 0.58rem;
+  line-height: 1.35;
 }
 
 .viz-table-frame {
@@ -1984,8 +2086,12 @@ button {
 .viz-table-frame th,
 .viz-table-frame td {
   border-bottom: 1px solid rgba(197, 139, 41, 0.16);
+  max-width: 210px;
+  overflow: hidden;
   padding: 5px 6px;
   text-align: left;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .viz-gauge-frame > div {
@@ -1999,7 +2105,72 @@ button {
 .live-orbital-plot {
   width: 100%;
   height: 100%;
-  min-height: 320px;
+  min-height: clamp(240px, 38vh, 340px);
+}
+
+.globe-shell {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  min-height: clamp(240px, 38vh, 340px);
+  overflow: hidden;
+  border: 1px solid rgba(197, 139, 41, 0.28);
+  background:
+    radial-gradient(circle at 50% 50%, rgba(83, 214, 232, 0.08), transparent 42%),
+    linear-gradient(90deg, rgba(83, 214, 232, 0.055) 1px, transparent 1px),
+    linear-gradient(180deg, rgba(197, 139, 41, 0.04) 1px, transparent 1px),
+    #030304;
+  background-size: auto, 18px 18px, 18px 18px, auto;
+}
+
+.globe-canvas {
+  position: absolute;
+  inset: 0;
+}
+
+.globe-canvas canvas {
+  display: block;
+  width: 100% !important;
+  height: 100% !important;
+}
+
+.globe-readout {
+  position: absolute;
+  top: 10px;
+  left: 12px;
+  right: 12px;
+  z-index: 2;
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  color: var(--crt-cyan);
+  font-family: var(--font-micro);
+  font-size: 0.55rem;
+  font-weight: 900;
+  pointer-events: none;
+}
+
+.globe-readout strong {
+  color: var(--primary);
+}
+
+.globe-tooltip {
+  display: grid;
+  gap: 3px;
+  min-width: 170px;
+  border: 1px solid rgba(197, 139, 41, 0.48);
+  background: rgba(6, 6, 6, 0.92);
+  color: var(--text-muted);
+  font-family: var(--font-micro);
+  font-size: 0.58rem;
+  font-weight: 800;
+  padding: 8px;
+  pointer-events: none;
+}
+
+.globe-tooltip strong {
+  color: var(--text);
+  font-size: 0.66rem;
 }
 
 .live-earth {
@@ -2046,6 +2217,7 @@ button {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 6px;
+  min-height: 0;
 }
 
 .severity-card.critical {
@@ -2059,6 +2231,7 @@ button {
 .mission-actions {
   display: flex;
   gap: 8px;
+  flex-wrap: wrap;
 }
 
 .mission-actions button,
@@ -2082,9 +2255,17 @@ button {
 
 .viz-state-frame {
   display: grid;
-  place-content: center;
+  align-content: center;
+  gap: 10px;
   min-height: 220px;
   text-align: center;
+}
+
+.viz-state-frame header {
+  display: grid;
+  gap: 4px;
+  justify-items: center;
+  border: 0;
 }
 
 .viz-state-frame span {
@@ -2098,6 +2279,90 @@ button {
   color: var(--radar-red);
   font-family: var(--font-display);
   font-size: 1.05rem;
+}
+
+.viz-provider-status-card {
+  width: min(420px, 100%);
+  margin: 0 auto;
+  border: 1px solid rgba(197, 139, 41, 0.28);
+  background: rgba(6, 6, 6, 0.52);
+  padding: 10px;
+  text-align: left;
+}
+
+.viz-provider-status-card dl {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 6px;
+  margin: 0;
+}
+
+.viz-provider-status-card div {
+  display: grid;
+  gap: 2px;
+}
+
+.viz-provider-status-card dt,
+.viz-provider-status-card dd {
+  overflow: hidden;
+  margin: 0;
+  font-family: var(--font-micro);
+  font-size: 0.54rem;
+  font-weight: 800;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.viz-provider-status-card dt {
+  color: var(--text-muted);
+}
+
+.viz-provider-status-card dd {
+  color: var(--text);
+}
+
+.viz-skeleton-stack {
+  display: grid;
+  gap: 8px;
+  width: min(420px, 100%);
+  margin: 0 auto;
+}
+
+.viz-skeleton-stack i {
+  height: 12px;
+  border: 1px solid rgba(197, 139, 41, 0.18);
+  background: linear-gradient(90deg, rgba(197, 139, 41, 0.08), rgba(83, 214, 232, 0.12), rgba(197, 139, 41, 0.08));
+  background-size: 220% 100%;
+  animation: skeletonScan 1.6s linear infinite;
+}
+
+@keyframes notificationIn {
+  from {
+    opacity: 0;
+    transform: translateX(14px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes notificationOut {
+  to {
+    opacity: 0;
+    transform: translateX(10px);
+  }
+}
+
+@keyframes skeletonScan {
+  from {
+    background-position: 120% 0;
+  }
+
+  to {
+    background-position: -120% 0;
+  }
 }
 
 @keyframes cursorBlink {
@@ -2137,10 +2402,58 @@ button {
 
 @media (max-width: 1100px) {
   body {
-    overflow: auto;
+    overflow: hidden;
   }
 
   .sentry-screen {
-    min-width: 1180px;
+    min-width: 0;
+    padding: 6px;
+  }
+
+  .sentry-os {
+    height: calc(100vh - 12px);
+    grid-template-rows: minmax(0, 1fr) 58px;
+  }
+
+  .command-bar {
+    grid-template-columns: minmax(154px, 1fr) minmax(150px, 0.8fr) minmax(178px, 0.9fr);
+  }
+
+  .status-lights {
+    display: none;
+  }
+
+  .sentry-body {
+    grid-template-columns: 74px minmax(0, 1fr) minmax(178px, 220px);
+  }
+
+  .rail-link {
+    grid-template-columns: 22px minmax(0, 1fr);
+    height: 44px;
+  }
+
+  .rail-link .rail-number {
+    display: none;
+  }
+
+  .workspace-grid.equal,
+  .workspace-grid.two-one {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .viz-stats-strip {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .severity-card-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .bottom-status-bar {
+    grid-template-columns: minmax(110px, 132px) repeat(4, minmax(70px, 1fr));
+  }
+
+  .status-cell:nth-of-type(n + 6) {
+    display: none;
   }
 }

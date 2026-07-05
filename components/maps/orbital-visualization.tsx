@@ -1,5 +1,6 @@
 "use client";
 
+import { GlobeView } from "@/components/globe/GlobeView";
 import type { LiveSatellite, LiveTimelineEvent } from "@/types/live-data";
 
 type OrbitalVisualizationProps = {
@@ -16,7 +17,7 @@ function project(latitude?: number, longitude?: number) {
 }
 
 export function OrbitalVisualization({ asteroids = [], onSelectSatellite, satellites, selectedSatelliteId }: OrbitalVisualizationProps) {
-  return (
+  const fallback = (
     <button className="orbital-plot live-orbital-plot" onClick={() => onSelectSatellite?.(satellites[0]?.id ?? "")} type="button">
       <svg viewBox="0 0 640 360" role="img" aria-label="Live orbital visualization">
         <defs>
@@ -43,14 +44,21 @@ export function OrbitalVisualization({ asteroids = [], onSelectSatellite, satell
             </g>
           );
         })}
-        {asteroids.slice(0, 8).map((event, index) => (
-          <path className="asteroid-arc" d={`M${32 + index * 64} ${310 - index * 12} C 240 ${80 + index * 8}, 402 ${74 + index * 11}, 610 ${36 + index * 20}`} key={event.id} />
-        ))}
       </svg>
       <span className="plot-label label-a">LIVE ORBITAL FRAME / SESSION TRAIL</span>
       <span className="plot-label label-b">SATELLITES {satellites.length}</span>
       <span className="plot-label label-c">EARTH</span>
-      <span className="plot-label label-d">ASTEROID TRACKS {asteroids.length}</span>
+      <span className="plot-label label-d">ASTEROID EVENTS {asteroids.length}</span>
     </button>
+  );
+
+  return (
+    <GlobeView
+      asteroidEvents={asteroids}
+      fallback={fallback}
+      onSelectSatellite={onSelectSatellite}
+      satellites={satellites}
+      selectedSatelliteId={selectedSatelliteId}
+    />
   );
 }

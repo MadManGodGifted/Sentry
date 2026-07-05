@@ -216,7 +216,7 @@ export const useAppStore = create<AppStore>()(
       selectedSatelliteId: firstSatellite?.id ?? null,
       selectedGraphId: "orbital-plot",
       activeAlerts: initialMock.byMission[firstMission.id]?.alerts.map((alert) => alert.id) ?? [],
-      notifications: [notification("system", "SYSTEM ONLINE", "Application state core initialized.", true)],
+      notifications: [],
       sidebarCollapsed: false,
       panelVisibility: { inspector: true, dock: true, console: true, plot: true },
       windows: initialWindows,
@@ -276,10 +276,8 @@ export const useAppStore = create<AppStore>()(
       setCommandPaletteQuery: (query) => set({ commandPaletteQuery: query }),
       pushNotification: (type, title, message, pinned = false) => {
         const item = notification(type, title, message, pinned);
-        set((state) => ({ notifications: [item, ...state.notifications].slice(0, 20) }));
-        if (!pinned) {
-          window.setTimeout(() => get().dismissNotification(item.id), 5200);
-        }
+        set((state) => ({ notifications: [item, ...state.notifications].slice(0, 8) }));
+        window.setTimeout(() => get().dismissNotification(item.id), 4600);
       },
       dismissNotification: (id) => set((state) => ({ notifications: state.notifications.filter((item) => item.id !== id) })),
       pinNotification: (id) =>

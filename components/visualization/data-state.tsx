@@ -23,6 +23,7 @@ export function DataState({ children, count, label, providers = [] }: DataStateP
         label={label}
         status={blockingProvider.status.toUpperCase()}
         detail={blockingProvider.message ?? `${blockingProvider.label} did not return data.`}
+        lastUpdate={blockingProvider.updatedAt}
       />
     );
   }
@@ -34,12 +35,45 @@ export function DataState({ children, count, label, providers = [] }: DataStateP
   return children;
 }
 
-function StateFrame({ detail, label, status }: { detail: string; label: string; status: string }) {
+function StateFrame({ detail, label, lastUpdate, status }: { detail: string; label: string; lastUpdate?: string | null; status: string }) {
+  const isLoading = status === "LOADING";
+
   return (
     <section className="viz-state-frame">
-      <span>{label}</span>
-      <strong>{status}</strong>
-      <p>{detail}</p>
+      <header>
+        <span>{label}</span>
+        <strong>{status}</strong>
+      </header>
+      {isLoading ? (
+        <div className="viz-skeleton-stack" aria-label="Loading provider data">
+          <i />
+          <i />
+          <i />
+          <i />
+        </div>
+      ) : (
+        <div className="viz-provider-status-card">
+          <dl>
+            <div>
+              <dt>PROVIDER</dt>
+              <dd>{label}</dd>
+            </div>
+            <div>
+              <dt>STATUS</dt>
+              <dd>{status}</dd>
+            </div>
+            <div>
+              <dt>LAST UPDATE</dt>
+              <dd>{lastUpdate ? new Date(lastUpdate).toLocaleTimeString("en-US", { hour12: false }) : "--:--:--"}</dd>
+            </div>
+            <div>
+              <dt>RETRY</dt>
+              <dd>60S</dd>
+            </div>
+          </dl>
+          <p>{detail}</p>
+        </div>
+      )}
     </section>
   );
 }
