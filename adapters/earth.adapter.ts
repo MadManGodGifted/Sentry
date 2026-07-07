@@ -4,6 +4,9 @@ import type { LiveAlert, LiveChartSeries, LiveTimelineEvent } from "@/types/live
 
 type UsgsFeature = {
   id: string;
+  geometry?: {
+    coordinates?: [number, number, number?];
+  };
   properties: {
     mag?: number;
     place?: string;
@@ -29,7 +32,9 @@ export const earthAdapter = {
         severity: (feature.properties.mag ?? 0) >= 6 ? "critical" : "warning",
         title: `M${feature.properties.mag ?? "--"} EARTHQUAKE`,
         detail: feature.properties.place ?? "USGS event",
-        at: dayjs(feature.properties.time).toISOString()
+        at: dayjs(feature.properties.time).toISOString(),
+        latitude: feature.geometry?.coordinates?.[1],
+        longitude: feature.geometry?.coordinates?.[0]
       })),
       timeline: features.map((feature) => ({
         id: `usgs-event-${feature.id}`,
@@ -37,7 +42,10 @@ export const earthAdapter = {
         kind: "natural-event",
         title: `M${feature.properties.mag ?? "--"} ${feature.properties.place ?? "Earthquake"}`,
         detail: feature.properties.type ?? "earthquake",
-        at: dayjs(feature.properties.time).toISOString()
+        at: dayjs(feature.properties.time).toISOString(),
+        latitude: feature.geometry?.coordinates?.[1],
+        longitude: feature.geometry?.coordinates?.[0],
+        magnitude: feature.properties.mag
       })),
       charts: [
         {

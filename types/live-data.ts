@@ -28,6 +28,8 @@ export type LiveAlert = {
   title: string;
   detail: string;
   at: string;
+  latitude?: number;
+  longitude?: number;
 };
 
 export type LiveTimelineEvent = {
@@ -37,6 +39,9 @@ export type LiveTimelineEvent = {
   title: string;
   detail: string;
   at: string;
+  latitude?: number;
+  longitude?: number;
+  magnitude?: number;
 };
 
 export type LiveMetric = {
@@ -57,6 +62,8 @@ export type LiveChartSeries = {
 export type LiveWeather = {
   id: string;
   location: string;
+  latitude?: number;
+  longitude?: number;
   temperatureC?: number;
   windKph?: number;
   pressureHpa?: number;

@@ -42,6 +42,16 @@ type EonetResponse = {
   }>;
 };
 
+function coordinatesFromEonet(event: NonNullable<EonetResponse["events"]>[number]) {
+  const coordinates = event.geometry?.[0]?.coordinates;
+  if (!Array.isArray(coordinates)) {
+    return {};
+  }
+
+  const [longitude, latitude] = coordinates.flat(Number.POSITIVE_INFINITY).filter((value): value is number => typeof value === "number");
+  return { latitude, longitude };
+}
+
 export const nasaAdapter = {
   async getApod(): Promise<LiveImagery[]> {
     const { data } = await http.get<{ title?: string; url?: string; date?: string; media_type?: string }>(`${NASA_BASE}/planetary/apod`, {
@@ -200,22 +210,30 @@ export const nasaAdapter = {
     });
     const events = data.events ?? [];
     return {
-      alerts: events.slice(0, 8).map((event) => ({
-        id: `eonet-${event.id}`,
-        source: "NASA EONET",
-        severity: event.categories?.some((category) => category.id === "severeStorms") ? "warning" : "info",
-        title: event.title,
-        detail: event.categories?.map((category) => category.title).join(" / ") ?? "Natural event",
-        at: dayjs(event.geometry?.[0]?.date).toISOString()
-      })),
-      timeline: events.map((event) => ({
-        id: `eonet-event-${event.id}`,
-        source: "NASA EONET",
-        kind: "natural-event",
-        title: event.title,
-        detail: event.categories?.map((category) => category.title).join(" / ") ?? "Natural event",
-        at: dayjs(event.geometry?.[0]?.date).toISOString()
-      }))
+      alerts: events.slice(0, 8).map((event) => {
+        const coordinates = coordinatesFromEonet(event);
+        return {
+          id: `eonet-${event.id}`,
+          source: "NASA EONET",
+          severity: event.categories?.some((category) => category.id === "severeStorms") ? "warning" : "info",
+          title: event.title,
+          detail: event.categories?.map((category) => category.title).join(" / ") ?? "Natural event",
+          at: dayjs(event.geometry?.[0]?.date).toISOString(),
+          ...coordinates
+        };
+      }),
+      timeline: events.map((event) => {
+        const coordinates = coordinatesFromEonet(event);
+        return {
+          id: `eonet-event-${event.id}`,
+          source: "NASA EONET",
+          kind: "natural-event",
+          title: event.title,
+          detail: event.categories?.map((category) => category.title).join(" / ") ?? "Natural event",
+          at: dayjs(event.geometry?.[0]?.date).toISOString(),
+          ...coordinates
+        };
+      })
     };
   },
 

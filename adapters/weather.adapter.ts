@@ -42,6 +42,8 @@ export const weatherAdapter = {
       weather: responses.map((response, index) => ({
         id: `wx-${sites[index].id}`,
         location: sites[index].location,
+        latitude: sites[index].latitude,
+        longitude: sites[index].longitude,
         temperatureC: response.data.current?.temperature_2m,
         windKph: response.data.current?.wind_speed_10m,
         pressureHpa: response.data.current?.pressure_msl,
