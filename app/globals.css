@@ -22,6 +22,11 @@
   --font-display: "Space Grotesk", "Inter Tight", "Arial Narrow", system-ui, sans-serif;
   --font-body: "IBM Plex Mono", "Cascadia Mono", "SFMono-Regular", Consolas, monospace;
   --font-micro: "JetBrains Mono", "IBM Plex Mono", "Cascadia Mono", monospace;
+  --motion-fast: 150ms;
+  --motion-medium: 260ms;
+  --motion-large: 420ms;
+  --motion-ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --motion-ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
 }
 
 @theme inline {
@@ -78,11 +83,13 @@ textarea {
 button {
   cursor: pointer;
   transition:
-    border-color 160ms ease,
-    background-color 160ms ease,
-    color 160ms ease,
-    opacity 160ms ease,
-    transform 120ms ease;
+    border-color var(--motion-fast) var(--motion-ease-out),
+    background-color var(--motion-fast) var(--motion-ease-out),
+    box-shadow var(--motion-fast) var(--motion-ease-out),
+    color var(--motion-fast) var(--motion-ease-out),
+    filter var(--motion-fast) var(--motion-ease-out),
+    opacity var(--motion-fast) var(--motion-ease-out),
+    transform 120ms var(--motion-ease-out);
 }
 
 button:active {
@@ -161,6 +168,7 @@ button:active {
   background-position: 0 0, 0 0, 18px 18px;
   background-size: 36px 36px;
   opacity: 0.17;
+  will-change: opacity;
 }
 
 .sentry-window {
@@ -179,6 +187,7 @@ button:active {
     inset 0 0 0 1px rgba(231, 226, 213, 0.035),
     0 0 0 1px rgba(0, 0, 0, 0.9),
     0 18px 56px rgba(0, 0, 0, 0.62);
+  will-change: opacity, transform;
 }
 
 .sentry-window::before,
@@ -246,6 +255,7 @@ button:active {
   place-items: center;
   border: 1px solid var(--primary);
   background: rgba(197, 139, 41, 0.08);
+  will-change: filter, transform;
 }
 
 .brand-mark::before,
@@ -494,9 +504,12 @@ button:active {
   padding: 0 7px;
   text-align: left;
   transition:
-    border-color 160ms ease,
-    color 160ms ease,
-    background-color 160ms ease;
+    border-color var(--motion-fast) var(--motion-ease-out),
+    box-shadow var(--motion-fast) var(--motion-ease-out),
+    color var(--motion-fast) var(--motion-ease-out),
+    background-color var(--motion-fast) var(--motion-ease-out),
+    transform var(--motion-fast) var(--motion-ease-out);
+  will-change: transform;
 }
 
 .rail-link::before {
@@ -536,6 +549,7 @@ button:active {
   background: rgba(83, 214, 232, 0.06);
   color: var(--text);
   outline: none;
+  transform: translateX(2px);
 }
 
 .rail-link[data-active="true"]::before {
@@ -1299,6 +1313,11 @@ button:active {
   font-size: 0.56rem;
   font-weight: 800;
   padding: 8px;
+  transition:
+    border-color var(--motion-fast) var(--motion-ease-out),
+    box-shadow var(--motion-fast) var(--motion-ease-out),
+    transform var(--motion-fast) var(--motion-ease-out);
+  will-change: transform;
 }
 
 .workspace-meta-frame strong,
@@ -1321,6 +1340,19 @@ button:active {
   min-height: 0;
   border: 1px solid var(--line-muted);
   background: rgba(7, 8, 8, 0.42);
+  transition:
+    border-color var(--motion-fast) var(--motion-ease-out),
+    box-shadow var(--motion-fast) var(--motion-ease-out),
+    opacity var(--motion-fast) var(--motion-ease-out),
+    transform var(--motion-fast) var(--motion-ease-out);
+  will-change: transform;
+}
+
+.workspace-meta-frame:hover,
+.empty-module-frame:hover {
+  border-color: rgba(83, 214, 232, 0.32);
+  box-shadow: inset 0 0 18px rgba(83, 214, 232, 0.035);
+  transform: translateY(-1px);
 }
 
 .empty-module-frame[data-collapsed="true"] {
@@ -1582,6 +1614,7 @@ button:active {
   justify-items: center;
   background: rgba(0, 0, 0, 0.28);
   padding-top: 76px;
+  animation: sentryFadeIn var(--motion-fast) var(--motion-ease-out) both;
 }
 
 .command-palette {
@@ -1600,6 +1633,8 @@ button:active {
     inset 0 0 0 1px rgba(233, 228, 216, 0.04),
     0 24px 80px rgba(0, 0, 0, 0.72);
   padding: 10px;
+  transform-origin: top center;
+  will-change: opacity, transform;
 }
 
 .command-palette header {
@@ -1638,6 +1673,20 @@ button:active {
   min-height: 30px;
   padding: 0 8px;
   text-align: left;
+  transition:
+    border-color var(--motion-fast) var(--motion-ease-out),
+    background-color var(--motion-fast) var(--motion-ease-out),
+    color var(--motion-fast) var(--motion-ease-out),
+    transform var(--motion-fast) var(--motion-ease-out);
+  will-change: transform;
+}
+
+.palette-results button:hover,
+.palette-results button:focus-visible {
+  background: rgba(83, 214, 232, 0.06);
+  color: var(--text);
+  outline: 1px solid rgba(83, 214, 232, 0.28);
+  transform: translateX(2px);
 }
 
 .palette-results span {
@@ -1671,6 +1720,7 @@ button:active {
   border: 1px solid rgba(197, 139, 41, 0.34);
   background: rgba(6, 6, 6, 0.88);
   padding: 5px;
+  will-change: transform;
 }
 
 .sentry-dock button,
@@ -1689,6 +1739,7 @@ button:active {
   min-width: 52px;
   max-width: 70px;
   height: 24px;
+  will-change: transform;
 }
 
 .sentry-dock span {
@@ -1705,6 +1756,7 @@ button:active {
   border-color: rgba(83, 214, 232, 0.5);
   color: var(--text);
   outline: none;
+  transform: translateY(-1px);
 }
 
 .sentry-dock i {
@@ -1744,9 +1796,9 @@ button:active {
   padding: 6px;
   pointer-events: auto;
   animation:
-    notificationIn 160ms ease-out both,
-    notificationOut 260ms ease-in 4.28s forwards;
-}
+    notificationIn var(--motion-fast) var(--motion-ease-out) both,
+    notificationOut var(--motion-medium) var(--motion-ease-in-out) 4.28s forwards;
+  }
 
 .sentry-notification > div {
   min-width: 0;
@@ -1822,6 +1874,7 @@ button:active {
     #050506;
   background-size: 18px 18px, 18px 18px, auto;
   padding: 10px;
+  will-change: opacity, transform;
 }
 
 .workspace-live-header,
@@ -1903,6 +1956,12 @@ button:active {
   border: 1px solid rgba(197, 139, 41, 0.22);
   background: rgba(6, 6, 6, 0.68);
   padding: 7px;
+  transition:
+    border-color var(--motion-fast) var(--motion-ease-out),
+    background-color var(--motion-fast) var(--motion-ease-out),
+    box-shadow var(--motion-fast) var(--motion-ease-out),
+    transform var(--motion-fast) var(--motion-ease-out);
+  will-change: transform;
 }
 
 .viz-stats-strip span,
@@ -1952,6 +2011,23 @@ button:active {
   background: rgba(5, 5, 6, 0.78);
   padding: 8px;
   overflow: hidden;
+  transition:
+    border-color var(--motion-fast) var(--motion-ease-out),
+    box-shadow var(--motion-fast) var(--motion-ease-out),
+    opacity var(--motion-fast) var(--motion-ease-out),
+    transform var(--motion-fast) var(--motion-ease-out);
+  will-change: opacity, transform;
+}
+
+.viz-chart-frame:hover,
+.viz-timeline-frame:hover,
+.viz-inspector-frame:hover,
+.viz-table-frame:hover,
+.viz-gauge-frame:hover,
+.viz-panel:hover,
+.viz-state-frame:hover {
+  border-color: rgba(197, 139, 41, 0.42);
+  box-shadow: inset 0 0 18px rgba(197, 139, 41, 0.035);
 }
 
 .viz-chart-grid,
@@ -2002,12 +2078,16 @@ button:active {
   font-weight: 800;
   padding: 0 6px;
   text-align: left;
+  transition:
+    border-color var(--motion-fast) var(--motion-ease-out),
+    background-color var(--motion-fast) var(--motion-ease-out),
+    color var(--motion-fast) var(--motion-ease-out),
+    transform var(--motion-fast) var(--motion-ease-out);
+  will-change: transform;
 }
 
 .viz-timeline-list button:hover,
 .viz-timeline-list button:focus-visible,
-.palette-results button:hover,
-.palette-results button:focus-visible,
 .viz-table-frame tr:hover td,
 .provider-matrix section:hover,
 .severity-card:hover,
@@ -2016,6 +2096,14 @@ button:active {
   background-color: rgba(83, 214, 232, 0.045);
   color: var(--text);
   outline: none;
+}
+
+.viz-timeline-list button:hover,
+.viz-timeline-list button:focus-visible,
+.provider-matrix section:hover,
+.severity-card:hover,
+.viz-stats-strip section:hover {
+  transform: translateY(-1px);
 }
 
 .viz-timeline-list span,
@@ -2352,6 +2440,16 @@ button:active {
   to {
     opacity: 0;
     transform: translateX(10px);
+  }
+}
+
+@keyframes sentryFadeIn {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
   }
 }
 

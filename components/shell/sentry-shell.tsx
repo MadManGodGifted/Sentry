@@ -1,9 +1,9 @@
 "use client";
 
 import { type CSSProperties, useCallback, useEffect, useMemo, useRef } from "react";
-import { motion } from "framer-motion";
 import { useWorkspace } from "@/hooks/useWorkspace";
 import { useLiveDataEngine } from "@/hooks/useLiveDataEngine";
+import { SentryMotion } from "@/components/motion/SentryMotion";
 import { useAppStore } from "@/store/app.store";
 import { BottomStatusBar } from "@/components/shell/bottom-status-bar";
 import { CommandBar } from "@/components/shell/command-bar";
@@ -524,13 +524,15 @@ export function SentryShell() {
   return (
     <main className="sentry-screen" onClick={closeContextMenu}>
       <div className="screen-noise" aria-hidden />
+      <SentryMotion
+        activeSection={activeSection}
+        commandPaletteOpen={commandPaletteOpen}
+        notificationCount={notifications.length}
+      />
       <div className="sentry-os">
-        <motion.div
-          animate={{ opacity: 1 }}
+        <div
           className="sentry-window"
-          initial={{ opacity: 0.96 }}
           style={{ "--right-panel-width": `${rightPanelWidth}px` } as CSSProperties}
-          transition={{ duration: 0.18, ease: "easeOut" }}
         >
           <CommandBar
             activeSection={activeSection}
@@ -580,7 +582,7 @@ export function SentryShell() {
               workspace={activeWorkspace}
             />
           </div>
-        </motion.div>
+        </div>
 
         <div className="sentry-dock" aria-label="Application dock">
           {dock.map((item) => (
@@ -606,10 +608,8 @@ export function SentryShell() {
 
       <div className="notification-stack" aria-label="Application notifications">
         {notifications.slice(0, 4).map((item) => (
-          <motion.section
-            animate={{ opacity: 1, x: 0 }}
+          <section
             className={`sentry-notification ${item.type}`}
-            initial={{ opacity: 0, x: 18 }}
             key={item.id}
             onContextMenu={(event) => {
               event.preventDefault();
@@ -622,19 +622,16 @@ export function SentryShell() {
               <p>{item.message}</p>
             </div>
             {!item.pinned ? <button onClick={() => dismissNotification(item.id)} type="button">CLR</button> : null}
-          </motion.section>
+          </section>
         ))}
       </div>
 
       {commandPaletteOpen ? (
         <div className="command-palette-backdrop" role="presentation" onMouseDown={() => setCommandPaletteOpen(false)}>
-          <motion.section
-            animate={{ opacity: 1, y: 0 }}
+          <section
             aria-label="Command palette"
             className="command-palette"
-            initial={{ opacity: 0, y: -6 }}
             onMouseDown={(event) => event.stopPropagation()}
-            transition={{ duration: 0.14, ease: "easeOut" }}
           >
             <header>
               <span>COMMAND PALETTE</span>
@@ -664,7 +661,7 @@ export function SentryShell() {
               ))}
               {!filteredPaletteActions.length ? <p>NO COMMANDS MATCH QUERY</p> : null}
             </div>
-          </motion.section>
+          </section>
         </div>
       ) : null}
 

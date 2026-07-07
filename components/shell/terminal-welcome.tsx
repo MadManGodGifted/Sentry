@@ -1,7 +1,6 @@
 "use client";
 
 import { FormEvent } from "react";
-import { motion } from "framer-motion";
 import { useAppStore } from "@/store/app.store";
 import { WorkspaceView } from "@/components/workspaces/workspace-views";
 import type { AppSection } from "@/types/app";
@@ -52,12 +51,7 @@ export function TerminalWelcome({
   };
 
   return (
-    <motion.div
-      animate={{ opacity: 1, y: 0 }}
-      className="terminal-stage"
-      initial={{ opacity: 0.92, y: 3 }}
-      transition={{ duration: 0.16, ease: "easeOut" }}
-    >
+    <div className="terminal-stage">
       <WorkspaceView
         activeSection={activeSection as AppSection}
         activeWorkspace={activeWorkspace}
@@ -92,6 +86,6 @@ export function TerminalWelcome({
           />
         </form>
       </section>
-    </motion.div>
+    </div>
   );
 }
